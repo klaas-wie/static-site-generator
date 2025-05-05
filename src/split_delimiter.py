@@ -16,8 +16,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         new = []
 
         if node.text_type != TextType.TEXT:
-            new.append(node)
-            result.extend(new)
+            result.append(node)
             continue
         
         if node.text.count(delimiter) % 2 != 0:
@@ -37,7 +36,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             else:
                 new.append(TextNode(item, text_type))
 
-    result.extend(new)
+        result.extend(new)
 
     return result
 
