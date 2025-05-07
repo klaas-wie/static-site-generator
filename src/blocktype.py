@@ -1,8 +1,6 @@
 from enum import Enum
 import re
 
-
-
 class BlockType(Enum):
 
     PARAGRAPH = 'paragraph'
@@ -22,10 +20,12 @@ def ordered_list_func(markdown_block):
             return False
     
     return True
-    
 
 
 def block_to_block_type(markdown_block):
+
+    if not markdown_block:
+        return BlockType.PARAGRAPH
 
     heading_pattern = r'^#{1,6} '
 
