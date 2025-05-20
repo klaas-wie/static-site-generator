@@ -1,16 +1,15 @@
-import os, shutil, pathlib
+import os, shutil, pathlib, sys
 
 from markdown_to_html_node import markdown_to_html_node
 from extract_title import extract_title
 
 project_root = "/home/cheese/workspace/github.com/klaas-wie/static-site-generator"
 
-# content_index = os.path.join(project_root, "content/index.md")
-# public_index = os.path.join(project_root, "public/index.html")
-
 content_path = os.path.join(project_root, "content")
 template = os.path.join(project_root, "template.html")
 public_path = os.path.join(project_root, "public")
+
+docs_dir = "/home/cheese/workspace/github.com/klaas-wie/static-site-generator/docs"
 
 
 def main():
@@ -19,11 +18,14 @@ def main():
 
     print(test)
 
+    try:
+        basepath = sys.argv[1]
+    except IndexError:
+        basepath = "/"
+
     copy_from_static_to_public(project_root)
 
-    #generate_page(content_index, template, public_index)
-
-    generate_pages_recursive(content_path, template, public_path)
+    generate_pages_recursive(content_path, template, docs_dir, basepath)
 
 
 def copy_from_static_to_public(path):
@@ -33,7 +35,6 @@ def copy_from_static_to_public(path):
 
     if os.path.exists(public_path):
         #delete /public and its contents recursively
-        #print(f"deleting {public_path}")
         shutil.rmtree(public_path)
         
     copy_recursively(static_path, public_path)
@@ -52,35 +53,12 @@ def copy_recursively(dir_path, destination_dir_path):
         if os.path.isfile(item_path) == False:
             new_destination = os.path.join(destination_dir_path, item)
             
-            #print(f"calling copy_recursively with item_path = {item_path} and destination = {new_destination}")
             copy_recursively(item_path, new_destination)
         else:
-            #print(f"copying {item_path}")
             shutil.copy(item_path, destination_dir_path)
 
-def generate_page(from_path, template_path, dest_path):
 
-    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-
-    with open (from_path) as f:
-        md = f.read()
-
-    with open(template_path) as f:
-        template = f.read()
-
-    html = markdown_to_html_node(md).to_html()
-
-    title = extract_title(md)
-
-    full_html = template.replace("{{ Title }}", title).replace("{{ Content }}", html)
-    
-    dir = os.path.dirname(dest_path)
-    os.makedirs(dir, exist_ok=True)
-
-    with open (dest_path, "w") as f:
-        f.write(full_html)
-
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
 
     #check if destination exists, if not make the dir
     if os.path.exists(dest_dir_path) == False:
@@ -95,7 +73,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         if os.path.isfile(item_path) == False:
             new_destination = os.path.join(dest_dir_path, item)
             
-            generate_pages_recursive(item_path, template_path, new_destination)
+            generate_pages_recursive(item_path, template_path, new_destination, basepath)
         elif item_path.suffix == ".md":
             with open (item_path) as f:
                 md = f.read()
@@ -108,6 +86,7 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
             title = extract_title(md)
 
             full_html = template.replace("{{ Title }}", title).replace("{{ Content }}", html)
+            full_html = full_html.replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}') 
 
             #change path to .html from .md
             item_stem = item_path.stem
