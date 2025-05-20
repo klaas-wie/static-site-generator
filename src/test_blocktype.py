@@ -2,7 +2,7 @@ import unittest
 
 from blocktype import block_to_block_type, BlockType
 
-#standard cases
+# standard cases
 
 header_block = "# This is a heading"
 
@@ -23,6 +23,7 @@ for item in iterable print(item)
 quote_block = """>this is
 >a quote
 >block"""
+
 
 class TestBlockType(unittest.TestCase):
 
@@ -50,11 +51,12 @@ class TestBlockType(unittest.TestCase):
         block = quote_block
         self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
 
-    #edge cases
+    # edge cases
 
     def test_edge_case_heading_without_space(self):
         block = "#NoSpaceHeading"
-        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)  # Not a valid heading
+        self.assertEqual(block_to_block_type(block),
+                         BlockType.PARAGRAPH)  # Not a valid heading
 
     def test_edge_case_heading_too_many_hashes(self):
         block = "####### Too many hashes"
@@ -75,12 +77,12 @@ class TestBlockType(unittest.TestCase):
 -After the dash"""
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
-
     def test_edge_case_quote_missing_prefix(self):
         block = """>This line has a prefix
 This line doesn't
 >This line does again"""
-        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)  # Not a valid quote block
+        self.assertEqual(block_to_block_type(block),
+                         BlockType.PARAGRAPH)  # Not a valid quote block
 
     def test_edge_case_code_missing_backticks(self):
         block = """```
@@ -109,8 +111,6 @@ print("Hello world!")
 >Line two of quote
 >Line three of quote"""
         self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
-    
-
 
 
 if __name__ == "__main__":

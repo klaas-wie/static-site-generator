@@ -1,5 +1,6 @@
 from textnode import TextNode, TextType
 
+
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
     italic = "_"
@@ -18,14 +19,14 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         if node.text_type != TextType.TEXT:
             result.append(node)
             continue
-        
+
         if node.text.count(delimiter) % 2 != 0:
             raise Exception("Issue with delimiters!")
         if node.text.count(delimiter) == 0:
             new.append(node)
             result.extend(new)
             continue
-        
+
         content = node.text.split(delimiter)
 
         for num, item in enumerate(content):
@@ -39,4 +40,3 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         result.extend(new)
 
     return result
-

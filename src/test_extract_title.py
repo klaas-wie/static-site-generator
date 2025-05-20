@@ -1,6 +1,7 @@
 import unittest
 from extract_title import extract_title
 
+
 class TestExtractTitle(unittest.TestCase):
 
     def test_extract_title_basic(self):

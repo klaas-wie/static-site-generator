@@ -1,6 +1,7 @@
 from textnode import TextNode, TextType
 from links_and_images import extract_markdown_links, extract_markdown_images
 
+
 def split_nodes_image(old_nodes):
 
     result = []
@@ -13,10 +14,10 @@ def split_nodes_image(old_nodes):
             new.append(node)
             result.extend(new)
             continue
-        
+
         list_of_image_tuples = extract_markdown_images(node.text)
 
-        #check if there are no images at all:
+        # check if there are no images at all:
         if list_of_image_tuples == []:
             result.append(node)
             continue
@@ -25,8 +26,8 @@ def split_nodes_image(old_nodes):
 
         text = node.text
 
-        #split text with alt_image_pair as delimiter, add text before and the pair to sections
-        #and continue splitting where last pair was found.
+        # split text with alt_image_pair as delimiter, add text before and the pair to sections
+        # and continue splitting where last pair was found.
         for alt_image_pair in list_of_image_tuples:
 
             alt, image = alt_image_pair
@@ -35,10 +36,10 @@ def split_nodes_image(old_nodes):
             sections.append(f"![{alt}]({image})")
             text = "".join(after_split[1:])
 
-        #add trailing text:
+        # add trailing text:
         sections.append(text)
 
-        #convert sections into nodes by alternating between TEXT and IMAGE.
+        # convert sections into nodes by alternating between TEXT and IMAGE.
         for num, item in enumerate(sections):
             if item == "":
                 continue
@@ -52,6 +53,7 @@ def split_nodes_image(old_nodes):
 
     return result
 
+
 def split_nodes_link(old_nodes):
 
     result = []
@@ -64,10 +66,10 @@ def split_nodes_link(old_nodes):
             new.append(node)
             result.extend(new)
             continue
-        
+
         list_of_link_tuples = extract_markdown_links(node.text)
 
-        #check if there are no links at all:
+        # check if there are no links at all:
         if list_of_link_tuples == []:
             result.append(node)
             continue
@@ -84,7 +86,7 @@ def split_nodes_link(old_nodes):
             sections.append(f"[{alt}]({link})")
             text = "".join(after_split[1:])
 
-        #add trailing text:
+        # add trailing text:
         sections.append(text)
 
         for num, item in enumerate(sections):

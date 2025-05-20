@@ -9,6 +9,7 @@ This is a paragraph of text. It has some **bold** and _italic_ words inside of i
 - This is another list item
 """
 
+
 def markdown_to_blocks(markdown):
 
     blocks = markdown.split("\n\n")

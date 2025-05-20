@@ -2,6 +2,7 @@ import unittest
 
 from textnode import TextType, TextNode, text_node_to_html_node
 
+
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
         node = TextNode("This is a text node", TextType.BOLD)
@@ -15,7 +16,8 @@ class TestTextNode(unittest.TestCase):
         self.assertNotEqual(node, node2)
 
     def test_url(self):
-        node = TextNode("This is a text node", TextType.LINK, "https://boot.dev")
+        node = TextNode("This is a text node",
+                        TextType.LINK, "https://boot.dev")
         node2 = TextNode("This is a text node", TextType.LINK)
         self.assertNotEqual(node, node2)
 
@@ -26,16 +28,19 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(html_node.value, "This is a text node")
 
     def test_link(self):
-        node = TextNode("This is a link node", TextType.LINK, "https://boot.dev")
+        node = TextNode("This is a link node",
+                        TextType.LINK, "https://boot.dev")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, 'a')
         self.assertEqual(html_node.props, {"href": "https://boot.dev"})
-    
+
     def test_image(self):
-        node = TextNode("description of image", TextType.IMAGE, "https://boot.dev/some_image")
+        node = TextNode("description of image", TextType.IMAGE,
+                        "https://boot.dev/some_image")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, 'img')
-        self.assertEqual(html_node.props, {"src": "https://boot.dev/some_image", "alt": "description of image"})
+        self.assertEqual(html_node.props, {
+                         "src": "https://boot.dev/some_image", "alt": "description of image"})
 
 
 if __name__ == "__main__":

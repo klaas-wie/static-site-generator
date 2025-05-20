@@ -2,12 +2,14 @@ import unittest
 
 from htmlnode import ParentNode, LeafNode, HTMLNode
 
+
 class TestParentNode(unittest.TestCase):
 
     def test_to_html_with_children(self):
         child_node = LeafNode("span", "child")
         parent_node = ParentNode("div", [child_node])
-        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+        self.assertEqual(parent_node.to_html(),
+                         "<div><span>child</span></div>")
 
     def test_to_html_with_grandchildren(self):
         grandchild_node = LeafNode("b", "grandchild")
@@ -19,7 +21,8 @@ class TestParentNode(unittest.TestCase):
         )
 
     def test_to_html_with_grandchildren_and_a_tag(self):
-        grandchild_node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        grandchild_node = LeafNode(
+            "a", "Click me!", {"href": "https://www.google.com"})
         child_node = ParentNode("span", [grandchild_node])
         parent_node = ParentNode("div", [child_node])
         self.assertEqual(
@@ -67,7 +70,7 @@ class TestParentNode(unittest.TestCase):
             node.to_html(),
             "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
         )
-        
+
 
 if __name__ == "__main__":
     unittest.main()

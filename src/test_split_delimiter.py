@@ -3,64 +3,67 @@ import unittest
 from split_delimiter import split_nodes_delimiter
 from textnode import TextNode, TextType
 
+
 class TestSplitDelimiter(unittest.TestCase):
 
     def test_snd_with_one_node(self):
         node = TextNode("This is text with a `code block` word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-        #print(f"new nodes = {new_nodes}")
+        # print(f"new nodes = {new_nodes}")
         self.assertEqual([
 
-    TextNode("This is text with a ", TextType.TEXT),
-    TextNode("code block", TextType.CODE),
-    TextNode(" word", TextType.TEXT),
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.TEXT),
 
-], new_nodes)
-        
+        ], new_nodes)
+
     def test_snd_with_multiple_delimiters(self):
-        node = TextNode("Here is `one code` and `another code` block", TextType.TEXT)
+        node = TextNode(
+            "Here is `one code` and `another code` block", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
 
         self.assertEqual([
 
-    TextNode("Here is ", TextType.TEXT),
-    TextNode("one code", TextType.CODE),
-    TextNode(" and ", TextType.TEXT),
-    TextNode("another code", TextType.CODE),
-    TextNode(" block", TextType.TEXT),
+            TextNode("Here is ", TextType.TEXT),
+            TextNode("one code", TextType.CODE),
+            TextNode(" and ", TextType.TEXT),
+            TextNode("another code", TextType.CODE),
+            TextNode(" block", TextType.TEXT),
 
         ], new_nodes)
 
     def test_snd_with_mismatched_delimiters(self):
         node = TextNode("Text with `mismatched delimiters", TextType.TEXT)
-        
+
         with self.assertRaises(Exception):
             new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-    
+
     def test_multiple_nodes_with_different_types(self):
         # Create a list of nodes with different types
         test9a = TextNode("Regular text", TextType.TEXT)
         test9b = TextNode("Bold text", TextType.BOLD)
         test9c = TextNode("Text with `code block`", TextType.TEXT)
-        
+
         # Process the list
-        result9 = split_nodes_delimiter([test9a, test9b, test9c], "`", TextType.CODE)
-        
+        result9 = split_nodes_delimiter(
+            [test9a, test9b, test9c], "`", TextType.CODE)
+
         # Assert the expected results
         self.assertEqual(len(result9), 4)
-        
+
         # First node should remain unchanged
         self.assertEqual(result9[0].text, "Regular text")
         self.assertEqual(result9[0].text_type, TextType.TEXT)
-        
+
         # Second node should remain unchanged (it's already BOLD)
         self.assertEqual(result9[1].text, "Bold text")
         self.assertEqual(result9[1].text_type, TextType.BOLD)
-        
+
         # Third node should be split into two nodes
         self.assertEqual(result9[2].text, "Text with ")
         self.assertEqual(result9[2].text_type, TextType.TEXT)
-        
+
         self.assertEqual(result9[3].text, "code block")
         self.assertEqual(result9[3].text_type, TextType.CODE)
 
@@ -103,8 +106,6 @@ class TestSplitDelimiter(unittest.TestCase):
             ],
             new_nodes,
         )
-
-    
 
 
 if __name__ == "__main__":

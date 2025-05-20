@@ -1,5 +1,6 @@
 import re
 
+
 def extract_title(markdown_text):
     match = re.search(r'^[ \t]*#\s+(.+)', markdown_text, re.MULTILINE)
     if match:

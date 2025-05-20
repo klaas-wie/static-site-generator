@@ -6,6 +6,7 @@ from htmlnode import HTMLNode, LeafNode, ParentNode
 from text_to_textnodes import text_to_textnodes
 from textnode import text_node_to_html_node, TextNode, TextType
 
+
 def markdown_to_html_node(markdown):
 
     blocks = markdown_to_blocks(markdown)
@@ -20,7 +21,7 @@ def markdown_to_html_node(markdown):
     return ParentNode("div", children, None)
 
 
-#helpers
+# helpers
 
 def block_to_html(block, block_type):
 
@@ -44,6 +45,7 @@ def block_to_html(block, block_type):
 
     return html_node
 
+
 def heading_to_html_node(block):
 
     heading_pattern = r'^#{1,6}'
@@ -57,17 +59,19 @@ def heading_to_html_node(block):
 
     return html_node
 
+
 def code_to_html_node(block):
 
     if not block.startswith("```") or not block.endswith("```"):
         raise ValueError("invalid code block")
-    
+
     text = block[4:-3]
     raw_text_node = TextNode(text, TextType.TEXT)
     child = text_node_to_html_node(raw_text_node)
     code = ParentNode("code", [child])
 
     return ParentNode("pre", [code])
+
 
 def quote_to_html_node(block):
 
@@ -83,6 +87,7 @@ def quote_to_html_node(block):
 
     return ParentNode("blockquote", children)
 
+
 def paragraph_to_html_node(block):
 
     lines = block.split("\n")
@@ -90,6 +95,7 @@ def paragraph_to_html_node(block):
     children = text_to_children(paragraph)
 
     return ParentNode("p", children)
+
 
 def unordered_block_to_html(block):
 
@@ -103,6 +109,7 @@ def unordered_block_to_html(block):
 
     return ParentNode("ul", html_items)
 
+
 def ordered_block_to_html(block):
 
     items = block.split("\n")
@@ -115,6 +122,7 @@ def ordered_block_to_html(block):
 
     return ParentNode("ol", html_items)
 
+
 def text_to_children(text):
 
     text_nodes = text_to_textnodes(text)
@@ -123,6 +131,5 @@ def text_to_children(text):
     for text_node in text_nodes:
         html_node = text_node_to_html_node(text_node)
         html_nodes.append(html_node)
-    
-    return html_nodes
 
+    return html_nodes
