@@ -3,11 +3,10 @@ import os, shutil, pathlib, sys
 from markdown_to_html_node import markdown_to_html_node
 from extract_title import extract_title
 
-project_root = "/home/cheese/workspace/github.com/klaas-wie/static-site-generator"
+project_root = "/home/cheese/workspace/github.com/klaas-wie/static-site-generator/"
 
 content_path = os.path.join(project_root, "content")
-template = os.path.join(project_root, "template.html")
-public_path = os.path.join(project_root, "public")
+template = os.path.join(project_root, "template.html")  
 
 docs_dir = "/home/cheese/workspace/github.com/klaas-wie/static-site-generator/docs"
 
@@ -30,7 +29,7 @@ def main():
 
 def copy_from_static_to_public(path):
 
-    public_path = path+"/public"
+    public_path = path+"/docs"
     static_path = path+"/static"
 
     if os.path.exists(public_path):
@@ -86,6 +85,9 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, bas
             title = extract_title(md)
 
             full_html = template.replace("{{ Title }}", title).replace("{{ Content }}", html)
+            
+            if not basepath.endswith("/"):
+                basepath += "/"
             full_html = full_html.replace('href="/', f'href="{basepath}').replace('src="/', f'src="{basepath}') 
 
             #change path to .html from .md
